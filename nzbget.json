@@ -1,9 +1,27 @@
 {
-  "version": 4,
+  "version": 5,
   "script": {
     "version": "1.0.0",
     "changeLog": "Initial release"
   },
+  "installation_questions": [
+    {
+        "question": "Choose a username",
+        "type": "text",
+        "key": "NZBGET_USER",
+        "required": true,
+        "default": "Admin",
+        "installonly": true
+    },
+    {
+        "question": "Input an account password",
+        "type": "password",
+        "key": "NZBGET_PASS",
+        "required": true,
+        "default": "$RANDOM_STRING(16)",
+        "installonly": true
+     }
+  ],
   "requirements": {
     "locations": [
       "ApplicationsPerformance",
@@ -11,7 +29,8 @@
     ],
     "specifications": [
       "1CORE",
-      "100MB"
+      "100MB",
+      "1GBRAM"
     ],
     "permissions": [
       "READ_WRITE_LOCATIONS"
@@ -39,9 +58,27 @@
     }
   ],
   "app_values": {
+    "nzbget": {
+      "additional_envs": [
+        {
+          "name": "NZBGET_USER",
+          "value": "$QUESTION(NZBGET_USER)"
+        },
+        {
+          "name": "NZBGET_PASS",
+          "value": "$QUESTION(NZBGET_PASS)"
+        }
+      ]
+    },
     "storage": {
       "config": "$HOST_PATH($LOCATION(ApplicationsPerformance)/nzbget/config)",
       "downloads": "$HOST_PATH($LOCATION(Downloads)/nzbget)"
     }
-  }
+  },
+  "resources": {
+    "limits": {
+      "cpus": 2,
+      "memory": "$MEMORY(5%, 1024)"
+      }
+    }
 }
